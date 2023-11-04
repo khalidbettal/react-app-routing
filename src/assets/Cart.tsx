@@ -24,6 +24,9 @@ function Cart() {
     const removeCart = (id: number) => {
         dispatch(removeFromCart(id));
       };
+
+   
+
   return (
     <div>
         <div className="h-screen bg-gray-100 pt-20">
