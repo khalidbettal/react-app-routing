@@ -1,8 +1,9 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Outlet } from 'react-router'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux'
 
 const user = {
   name: 'Tom Cook',
@@ -11,22 +12,31 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Dashboard', to: '/',  },
-  { name: 'Survry', to: '/survey' },
+  { name: 'Product', to: '/',  },
   { name: 'Login', to: 'login' },
   { name: 'Register', to: 'register' },
  
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
+
+interface CartItem {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  image: string;
+}
+
 export default function Example() {
+  const cart = useSelector((state: { cart: { items: CartItem[] } }) => state.cart.items);
+  console.log(cart.length);
   return (
     <>
     
@@ -66,14 +76,16 @@ export default function Example() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
+                      <NavLink to="/cart">
                       <button
                         type="button"
                         className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                       >
                         <span className="absolute -inset-1.5" />
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
+                        <span className="not-sr-only text-green-400">{cart.length}</span>
+                        <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
+                      </NavLink>
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
@@ -101,6 +113,7 @@ export default function Example() {
                                     href={item.href}
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
+                                      item.name === 'Sign out' ? 'block px-4 py-2 text-sm text-red-700' :
                                       'block px-4 py-2 text-sm text-gray-700'
                                     )}
                                   >
@@ -153,14 +166,16 @@ export default function Example() {
                       <div className="text-base font-medium leading-none text-white">{user.name}</div>
                       <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
                     </div>
+                    <NavLink to="/cart">
                     <button
                       type="button"
                       className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="absolute -inset-1.5" />
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
+                      <span className="not-sr-only text-green-400">{cart.length}</span>
+                      <ShoppingCartIcon className="h-6 w-6 mx-6" aria-hidden="true" />
                     </button>
+                    </NavLink>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (
@@ -168,7 +183,9 @@ export default function Example() {
                         key={item.name}
                         as="a"
                         href={item.href}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                        className={classNames(
+                          item.name === 'Sign out' ? 'block px-3 py-2 text-base font-medium text-red-700' : "block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white",
+                        )}
                       >
                         {item.name}
                       </Disclosure.Button>

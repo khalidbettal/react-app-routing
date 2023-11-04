@@ -5,6 +5,7 @@ import Register from "./views/Register";
 import Dashboard from "./views/Dashboard";
 import GuestLayout from "./components/GuestLayout";
 import DefaultLayout from "./components/DefaultLayout";
+import Product from "./assets/Product";
 
 const router = createBrowserRouter([
 
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
             
             },
             {
-                path: "/survey",
+                path: "/cart",
                 element: <Survey/>
             },
         ]
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
             }
         ]
     },
+    {
+        path: "/products",
+        element: <Product />
+    }
     
 
 ])
